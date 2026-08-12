@@ -1,26 +1,192 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #08090d;
+  --surface: #0f1216;
+  --surface-2: #151921;
+  --surface-3: #1b212c;
+  --border: #232a36;
+  --border-soft: #1a2029;
+  --foreground: #e7eaf0;
+  --muted: #8a91a0;
+  --muted-2: #5e6573;
+
+  --accent: #7c5cff; /* vibe violet */
+  --accent-2: #22d3ee; /* cyan */
+  --p1: #38bdf8; /* 사용자(플레이어1) */
+  --p1-soft: #0b3a52;
+  --p2: #fb7185; /* 상대(플레이어2) */
+  --p2-soft: #4a1d2a;
+  --success: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-p1: var(--p1);
+  --color-p2: var(--p2);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  background-image:
+    radial-gradient(900px 500px at 85% -8%, rgba(124, 92, 255, 0.12), transparent 60%),
+    radial-gradient(800px 420px at 8% 0%, rgba(34, 211, 238, 0.08), transparent 55%);
+  background-attachment: fixed;
 }
+
+::selection {
+  background: rgba(124, 92, 255, 0.35);
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 6px;
+  border: 2px solid var(--background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3340;
+}
+
+/* 유틸 컴포넌트 클래스 */
+@layer components {
+  .panel {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .panel-2 {
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--muted);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--foreground);
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background: var(--surface-3);
+    border-color: #2f3947;
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #6a47ff);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 8px 24px -10px rgba(124, 92, 255, 0.7);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+    background: linear-gradient(135deg, var(--accent), #6a47ff);
+  }
+  .mono {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+  }
+  .grad-text {
+    background: linear-gradient(120deg, #fff 10%, var(--accent-2) 55%, var(--accent) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(52, 211, 153, 0);
+  }
+}
+@keyframes toastIn {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.cell-pop {
+  animation: pop 0.18s ease-out;
+}
+.cell-infected {
+  animation: flash 0.5s ease-out;
+}
+
+/* 코드 에디터 문법 하이라이팅 토큰 색 */
+.tok-kw { color: #c792ea; }
+.tok-str { color: #86e1a0; }
+.tok-com { color: #5e6573; font-style: italic; }
+.tok-num { color: #f7a86b; }
+.tok-fn { color: #67e8f9; }
+.tok-punct { color: #8a91a0; }
